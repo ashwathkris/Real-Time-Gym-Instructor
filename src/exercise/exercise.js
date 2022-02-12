@@ -1,7 +1,9 @@
 import React,{useEffect,useState,useRef} from "react";
 import video from '../utils/test.mp4'
+import { useLocation } from "react-router-dom";
 import { Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Nav from "../home/nav"
 
 
 const Exercise=()=> {
@@ -17,9 +19,12 @@ const Exercise=()=> {
                 setSeconds(seconds => seconds + 1)
             }, 1000)
     }
-
+  let {state} = useLocation();
+  var source=`http://127.0.0.1:5000/video_feed?key=${state}`
+  console.log(source)
   return (
     <div>
+    <Nav />
     <div style={{display:"block",
       marginTop: "150px",
       marginLeft: "50px",
@@ -32,7 +37,7 @@ const Exercise=()=> {
       setCheck(false)
     }}>
       <source    src={video}  type="video/mp4"/>
-    </video>:<img src="http://127.0.0.1:5000/video_feed" width="700" height="500"/>
+    </video>:<img src={source} width="700" height="500"/>
   }</div> 
   <div class="divider divider-vertical"></div> 
   <div class="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center">
@@ -46,7 +51,7 @@ const Exercise=()=> {
   <div style={{marginTop:"50px"}}>
   <button class="ui big red button" onClick={()=>{
     clearInterval(setSeconds(0))
-    axios.get("http://127.0.0.1:5000/results").then((res)=>{
+    axios.get(`http://127.0.0.1:5000/results?key=${state}`).then((res)=>{
       navigate("/dashboard",{ state:res.data })
     })
   }}>End Exercise</button>
