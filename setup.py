@@ -10,6 +10,7 @@ import mediapipe as mp
 import numpy as np
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
+from stopwatch import Stopwatch
 
 
 # initialize a flask object
@@ -38,7 +39,9 @@ def calculate_angle(a,b,c):
 def generate():
 	
 	# loop over frames from the output stream
+    
     vs = VideoStream().start()
+    stopwatch = Stopwatch()
     detector = pm.poseDetector()
     count = 0
     direction =0 
@@ -86,14 +89,14 @@ def generate():
                     direction = 0
 
             prev_per = per
-
+            str(stopwatch)
             cv2.putText(img, str(count), (50,100), cv2.FONT_HERSHEY_PLAIN, 5, (255,0,0),4)
         (flag, encodedImage) = cv2.imencode(".jpg",img)
         if not flag:
                 continue
         yield(b'--frame\r\n' b'Content-Type: image/jpeg\r\n\r\n' + bytearray(encodedImage) + b'\r\n')
-    # cv2.waitKey(1)
-    # vs.stop()
+    cv2.waitKey(1)
+    vs.stop()
  		
  
  
