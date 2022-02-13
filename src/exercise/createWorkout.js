@@ -7,13 +7,8 @@ const CreateWorkout=()=> {
   let {state} = useLocation();
   const imageInput = useRef();
   const [file, setFile] = useState({});
+  const [count, setCount] = useState(0);
 
-  const handleImage = (e) => {
-    const formData = new FormData();
-    formData.append('file', e.target.files[0])
-    console.log(formData)
-    // setFile(formData)
-  };
 
   return (
     <div>
@@ -29,12 +24,41 @@ const CreateWorkout=()=> {
   </div> 
   <div class="divider divider-vertical"></div> 
   <div class="grid flex-grow h-32  card bg-base-300 rounded-box place-items-center" style={{marginRight:"70px"}}>
+  <div  className="ui  input">
+  <input 
+  type="text"
+  placeholder="Name of Exercise"
+  onChange={(e)=>{setFile({...file,"title":e.target.value})}}
+  />
+  </div>
   <div className="ui small input focus" style={{ margin: '10px' }}>
   <input
     type="file"
-    onChange={handleImage}
+    onChange={(e)=>{setFile({...file,"image":e.target.files[0]})}}
   />
 </div>
+<div  className="ui small  input">
+  <input 
+  type="number"
+  placeholder="Enter no of joints"
+  onChange={(e)=>{setCount(e.target.value)}}
+  />
+  </div>
+  <div>
+    {(count)?Array(count*3).fill().map((val,index)=>(<div>
+        <div className="ui small input focus" style={{ margin: '10px' }}>
+              <input
+                type="text"
+                placeholder="Point"
+              />
+            </div>
+        </div>)):null}
+    </div>
+    <div style={{margin: '10px'}}>
+        <button className="ui big green button">
+        Create Exercise
+        </button>
+    </div>
   </div>
 </div>
 </div>
