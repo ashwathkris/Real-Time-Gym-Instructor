@@ -55,7 +55,7 @@ def calculate_angle(a, b, c):
 def leftBicepCurl():
 
     # loop over frames from the output stream
-    global pers,wrong
+    global pers,wrong,err_bottom,err_top
     vs = VideoStream().start()
     stopwatch = Stopwatch()
     detector = pm.poseDetector()
@@ -65,6 +65,10 @@ def leftBicepCurl():
     e = 0
     pers=[]
     wrong=[]
+    text=""
+    f=0
+    err_top=[]
+    err_bottom=[]
     while True:
         global check
         if check:
@@ -89,6 +93,8 @@ def leftBicepCurl():
 
                 if(e == 20):
                     print('Lift your arm higher')
+                    text='Lift your arm higher'
+                    f=50
                     wrong.append(len(pers)-1)
                     e = 0
 
@@ -98,6 +104,8 @@ def leftBicepCurl():
 
                 if(e == 20):
                     print('lower your arm')
+                    text='lower your arm'
+                    f=50
                     wrong.append(len(pers)-1)
                     e = 0
 
@@ -105,17 +113,23 @@ def leftBicepCurl():
             if per == 100:
                 if direction == 0:
                     count += 0.5
+                    err_bottom.append(angle)
                     direction = 1
 
             if per == 0:
                 if direction == 1:
                     count += 0.5
+                    err_top.append(angle)
                     direction = 0
 
             prev_per = per
             str(stopwatch)
+            if f > 0 and text!="":
+                cv2.putText(img,text, (20, 500),
+                        cv2.FONT_HERSHEY_PLAIN, 4, (255,255,255), 4)
+                f=f-1
             cv2.putText(img, str(count), (50, 100),
-                        cv2.FONT_HERSHEY_PLAIN, 7, (255,255,255), 4,2)
+                        cv2.FONT_HERSHEY_PLAIN, 7, (255,255,255), 4)
         (flag, encodedImage) = cv2.imencode(".jpg", img)
         if not flag:
             continue
@@ -134,7 +148,8 @@ def plank():
     e2=0
     e22=0
     e3=0
-
+    f=0
+    text=""
     l1 = []
     l2 = []
     start = time.time()
@@ -161,20 +176,26 @@ def plank():
             #x`print(angle1, angle2, angle3)
             if not 75<=angle1<=105:
                 e1+=1
-            if(e1==30):
+            if(e1==40):
                 print('Bring your shoulder vertically above your elbow')
+                text="Bring your shoulder vertically above your elbow"
+                f=50
                 e1 = 0
 
-            if angle2<150:
+            if angle2<140:
                 e2+=1
             if(e2==40):
                 print('Make your back straight. Bring your buttocks DOWN')
+                text="Make your back straight. Bring your buttocks DOWN"
+                f=50
                 e2 = 0 
 
-            if angle2 > 168:
+            if angle2 > 170:
                 e22+=1
             if(e22==40):
                 print('Make your back straight. Bring your buttocks UP')
+                text="Make your back straight. Bring your buttocks UP"
+                f=50
                 e2=0
 
 
@@ -182,11 +203,16 @@ def plank():
                 e3+=1
             if(e3==40):
                 print('Do not bend your knee. Stretch your legs')
+                text="Do not bend your knee. Stretch your legs"
+                f=50
                 e3 = 0
 
 
 		#cv2.putText(img, str(count), (50,100), cv2.FONT_HERSHEY_PLAIN, 5, (255,0,0),4)
-  
+        if f > 0 and text!="":
+                cv2.putText(img,text, (20, 550),
+                        cv2.FONT_HERSHEY_PLAIN, 2, (255,255,255), 2)
+                f=f-1
         (flag, encodedImage) = cv2.imencode(".jpg", img)
         if not flag:
             continue
@@ -206,7 +232,7 @@ def pushups():
     direction = 0  # 0 if gng down, 1 if gng up
     prev_per = 0
     e = 0
-
+    d = 0
     l1 = []
     l2 = []
     err_top=[]
@@ -240,10 +266,16 @@ def pushups():
                 # leg>170
                 if legAngle<160:
                     #cv2.putText(img, "make ur legs straighter", (0,100), cv2.FONT_HERSHEY_PLAIN, 5, (255,0,0),4)
-                    print('make ur legs straighter')
+                    d+=1
+                if(d==40):
+                    print('make your legs straighter')
+                    d=0
                 if buttAngle<155:
                     #cv2.putText(img, "make ur butt straighter", (0,100), cv2.FONT_HERSHEY_PLAIN, 5, (255,0,0),4)
-                    print('make your back straight.')          
+                    d+=1
+                if(d==50):
+                    print('make your back straight.') 
+                    d=0         
                 
                 if prev_per > per: 
                     e+=1
@@ -258,10 +290,17 @@ def pushups():
                 # leg>170
                 if legAngle<160:
                     #cv2.putText(img, "make ur legs straighter", (0,100), cv2.FONT_HERSHEY_PLAIN, 5, (255,0,0),4)
-                    print('make ur legs straighter')
+                    d+=1
+                if(d==40):
+                    print('make your legs straighter')
+                    d=0
                 if buttAngle<155:
                     #cv2.putText(img, "make ur butt straighter", (0,100), cv2.FONT_HERSHEY_PLAIN, 5, (255,0,0),4)
-                    print('make your back straight.')              
+                    d+=1
+                if(d==50):
+                    print('make your back straight.')
+                    d=0          
+                            
 
                 if(prev_per > per):
                     e+=1
@@ -300,6 +339,7 @@ def video_feed():
     # return the response generated along with the specific media
     # type (mime type)
     if request.args.get("key")=="Left Bicep Curl":
+        print(leftBicepCurl())
         return Response(leftBicepCurl(),
                         mimetype="multipart/x-mixed-replace; boundary=frame")
     elif request.args.get("key")=="Right Bicep Curl":
@@ -319,12 +359,30 @@ def results():
     if request.args.get("key")=="Left Bicep Curl":
         img = BytesIO()
         check = True
-        x=[i for i in range(len(pers))]
-        y=np.array(pers)
-        x=np.array(x)
-        plt.plot(x,y)
-        for i in wrong:
-            plt.plot(x[i],y[i],'ro')
+        top=np.array(err_top)
+        bottom=np.array(err_bottom)
+        x=np.array([i for i in range(max(len(err_top),len(err_bottom)))])
+        plt1=plt.subplot2grid((1,2),(0,0),colspan=1)
+        plt2=plt.subplot2grid((1,2),(0,1),colspan=1)
+        plt1.axhline(y = 170, color = 'r', linestyle = 'dashed',label = "minimum ideal angle at the top")
+        plt2.axhline(y = 40, color = 'g', linestyle = 'dashed',label = "maximum ideal angle at the bottom")
+        plt1.plot(np.array([i/40 for i in range(len(err_top))]),top,color="blue",linewidth = 1,label = "user position at the top")
+        plt2.plot(np.array([i/40 for i in range(len(err_bottom))]),bottom,color="blue",linewidth = 1, label = "user position at the top")
+        plt1.set_ylim(100,200)
+        plt2.set_ylim(30,70)
+        plt1.set_xlabel('time')
+        plt2.set_xlabel('time')
+
+        # naming the y axis
+        plt1.set_ylabel('accuracy')
+        plt2.set_ylabel('accuracy')
+
+        plt1.set_title('Accuracy of position(top)')
+        plt2.set_title('Accuracy of position(bottom)')
+
+
+        plt1.legend()
+        plt2.legend()
         plt.savefig(img, format='png')
         plt.close()
         img.seek(0)
@@ -338,6 +396,7 @@ def results():
         err_top=[]
         err_bottom=[]
         return plot_url
+    
     elif request.args.get("key")=="Right Bicep Curl":
         return None
     elif request.args.get("key")=="Plank":

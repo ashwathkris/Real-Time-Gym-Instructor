@@ -1,21 +1,18 @@
-import React,{useEffect,useState} from "react";
+import React from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
-import { Line } from 'react-chartjs-2';
+import Nav from "../home/nav"
 
 const Dashboard=()=> {
-  const [check,setCheck] = useState(true);
   let {state} = useLocation();
-//   console.log(state)
-//   let final=[]
-//   for(var i=0;i<state['x'].length;i++){
-//       final.push({x:state['x'][i],y:state['y'][i]})
-//   }
-//   console.log(final)
-console.log(state)
   return (
+    <div>
+    <Nav />
+    <div style={{position:"relative",left:"450px",margin:"20px"}}>
+    <div style={{marginLeft:"150px",fontSize:"30px",fontFamily:"sans-serif",fontWeight:"bold"}}>Session Summary!</div>
     <div class="flex-container">
     <img src={`data:image/png;base64,${state}`} />
+    </div>
+    </div>
     </div>
   );
 }

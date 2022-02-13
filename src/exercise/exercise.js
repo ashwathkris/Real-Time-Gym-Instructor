@@ -1,4 +1,4 @@
-import React,{useEffect,useState,useRef} from "react";
+import React,{useState,useRef} from "react";
 import video from '../utils/test.mp4'
 import { useLocation } from "react-router-dom";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -9,9 +9,9 @@ import Nav from "../home/nav"
 const Exercise=()=> {
   const [check,setCheck] = useState(true);
   const [start,setStart] = useState(true); 
+
   let navigate = useNavigate();
   const vid = useRef(null)
-
   const [seconds, setSeconds] = useState(0)
 
     const startTimer = () => {
@@ -26,18 +26,18 @@ const Exercise=()=> {
     <div>
     <Nav />
     <div style={{display:"block",
-      marginTop: "150px",
+      marginTop: "20px",
       marginLeft: "50px",
       marginRight:"50px",
       width: "100%"}}>
     <div class="flex flex-row w-full" >
-  <div class="grid flex-grow h-32 w-10 card bg-base-300 rounded-box place-items-center" width="700" height="500" >{(check)?
+  <div class="grid flex-grow h-32 w-30 card bg-base-300 rounded-box place-items-center" width="700" height="500" >{(check)?
     <video ref={vid} style={{objectFit:"cover"}}  muted onEnded={()=>{
       startTimer()
       setCheck(false)
     }}>
       <source    src={video}  type="video/mp4"/>
-    </video>:<img src={source} width="700" height="500"/>
+    </video>:<img src={source} width="900" height="500"/>
   }</div> 
   <div class="divider divider-vertical"></div> 
   <div class="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center">
