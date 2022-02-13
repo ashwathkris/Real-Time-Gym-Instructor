@@ -125,7 +125,7 @@ def leftBicepCurl():
             prev_per = per
             str(stopwatch)
             if f > 0 and text!="":
-                cv2.putText(img,text, (20, 500),
+                cv2.putText(img,text, (20, 550),
                         cv2.FONT_HERSHEY_PLAIN, 4, (255,255,255), 4)
                 f=f-1
             cv2.putText(img, str(count), (50, 100),
@@ -177,24 +177,24 @@ def plank():
             if not 75<=angle1<=105:
                 e1+=1
             if(e1==40):
-                print('Bring your shoulder vertically above your elbow')
-                text="Bring your shoulder vertically above your elbow"
+                print('Place shoulder vertically above your elbow')
+                text="Place shoulder vertically above your elbow"
                 f=50
                 e1 = 0
 
             if angle2<140:
                 e2+=1
             if(e2==40):
-                print('Make your back straight. Bring your buttocks DOWN')
-                text="Make your back straight. Bring your buttocks DOWN"
+                print('Straighten your back. Bring your back DOWN')
+                text="Straighten your back. Bring your back DOWN"
                 f=50
                 e2 = 0 
 
             if angle2 > 170:
                 e22+=1
             if(e22==40):
-                print('Make your back straight. Bring your buttocks UP')
-                text="Make your back straight. Bring your buttocks UP"
+                print('Straighten your back. Bring your back UP')
+                text="Straighten your back. Bring your back UP"
                 f=50
                 e2=0
 
@@ -233,8 +233,13 @@ def pushups():
     prev_per = 0
     e = 0
     d = 0
+    d1=0
+    d2=0
+    d3=0
     l1 = []
     l2 = []
+    f=0
+    text=""
     err_top=[]
     err_bottom=[]
     start=time.time()
@@ -264,17 +269,21 @@ def pushups():
                 # elbow>165
                 # but>160
                 # leg>170
-                if legAngle<160:
+                if legAngle<155:
                     #cv2.putText(img, "make ur legs straighter", (0,100), cv2.FONT_HERSHEY_PLAIN, 5, (255,0,0),4)
-                    d+=1
-                if(d==40):
+                    d1+=1
+                if(d1==40):
                     print('make your legs straighter')
-                    d=0
+                    text="make your legs straighterDown"
+                    f=50
+                    d1=0
                 if buttAngle<155:
                     #cv2.putText(img, "make ur butt straighter", (0,100), cv2.FONT_HERSHEY_PLAIN, 5, (255,0,0),4)
                     d+=1
                 if(d==50):
-                    print('make your back straight.') 
+                    print('make your back straight.')
+                    text="make your back straight."
+                    f=50 
                     d=0         
                 
                 if prev_per > per: 
@@ -282,30 +291,38 @@ def pushups():
 
                 if(e == 40):
                     print('bring your chest closer to the ground!')
+                    text="bring your chest closer to the ground!"
+                    f=50 
                     e= 0
                     
             if direction == 1:#going up
                 # elbow<40
                 # but>160
                 # leg>170
-                if legAngle<160:
+                if legAngle<155:
                     #cv2.putText(img, "make ur legs straighter", (0,100), cv2.FONT_HERSHEY_PLAIN, 5, (255,0,0),4)
-                    d+=1
-                if(d==40):
+                    d2+=1
+                if(d2==40):
                     print('make your legs straighter')
-                    d=0
+                    text="make your legs straighter"
+                    f=50 
+                    d2=0
                 if buttAngle<155:
                     #cv2.putText(img, "make ur butt straighter", (0,100), cv2.FONT_HERSHEY_PLAIN, 5, (255,0,0),4)
-                    d+=1
-                if(d==50):
+                    d3+=1
+                if(d3==50):
                     print('make your back straight.')
-                    d=0          
+                    text="make your back straight."
+                    f=50
+                    d3=0          
                             
 
                 if(prev_per > per):
                     e+=1
                 if(e==40):
                     print('Higher! Straighten your hands')
+                    text='Higher! Straighten your hands'
+                    f=50
                     e= 0
                         
             # counting
@@ -322,6 +339,10 @@ def pushups():
                     direction = 0
 
             prev_Angle = elbowAngle
+            if f > 0 and text!="":
+                cv2.putText(img,text, (20, 550),
+                        cv2.FONT_HERSHEY_PLAIN, 2, (255,255,255), 2)
+                f=f-1
             cv2.putText(img, str(count), (50,100), cv2.FONT_HERSHEY_PLAIN, 5, (255,0,0),4)
   
         (flag, encodedImage) = cv2.imencode(".jpg", img)
@@ -482,6 +503,7 @@ def results():
         return plot_url
         return None
         
+
 
 if __name__ == '__main__':
 

@@ -27,12 +27,12 @@ const Exercise=()=> {
     <Nav />
     <div style={{display:"block",
       marginTop: "20px",
-      marginLeft: "50px",
-      marginRight:"50px",
+      marginLeft: "20px",
+      marginRight:"0px",
       width: "100%"}}>
     <div class="flex flex-row w-full" >
-  <div class="grid flex-grow h-32 w-30 card bg-base-300 rounded-box place-items-center" width="700" height="500" >{(check)?
-    <video ref={vid} style={{objectFit:"cover"}}  muted onEnded={()=>{
+  <div class="grid flex-grow h-32 w-45 card bg-base-300 rounded-box place-items-center" >{(check)?
+    <video ref={vid} style={{objectFit:"cover"}}  width="900" height="500" muted onEnded={()=>{
       startTimer()
       setCheck(false)
     }}>
@@ -40,7 +40,7 @@ const Exercise=()=> {
     </video>:<img src={source} width="900" height="500"/>
   }</div> 
   <div class="divider divider-vertical"></div> 
-  <div class="grid flex-grow h-32 card bg-base-300 rounded-box place-items-center">
+  <div class="grid flex-grow h-32 w-25 card bg-base-300 rounded-box place-items-center" style={{marginRight:"70px"}}>
   <div>{(start)?<div style={{fontSize:"100px",fontWeight:"bold"}}>00:00</div>:<div style={{fontSize:"100px",fontWeight:"bold"}}>{ new Date(seconds * 1000).toISOString().substr(14, 5)}</div>}</div>
   {(start)?<div style={{marginTop:"50px"}}>
   <button class="ui big purple button" onClick={()=>{

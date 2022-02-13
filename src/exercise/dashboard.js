@@ -7,8 +7,8 @@ const Dashboard=()=> {
   return (
     <div>
     <Nav />
-    <div style={{position:"relative",left:"450px",margin:"20px"}}>
-    <div style={{marginLeft:"150px",fontSize:"30px",fontFamily:"sans-serif",fontWeight:"bold"}}>Session Summary!</div>
+    <div style={{position:"relative",left:"420px",margin:"20px"}}>
+    <div style={{marginLeft:"180px",fontSize:"30px",fontFamily:"sans-serif",fontWeight:"bold"}}>Session Summary!</div>
     <div class="flex-container">
     <img src={`data:image/png;base64,${state}`} />
     </div>
